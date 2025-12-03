@@ -5,7 +5,7 @@ namespace: mmagent04-dev
 images:
   apiServerImage:
     repository: 229560443702.dkr.ecr.us-west-2.amazonaws.com/mmagent04
-    tag: 0.0.0
+    tag: 6aab320461c773f084d0c2ff32eb4499afacf430
 
 apiServer:
   service:
