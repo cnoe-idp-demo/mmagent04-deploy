@@ -77,7 +77,9 @@ apiServer:
     extraEnv: []
     envFrom: []  # List of ConfigMap or Secret references to load environment variables from
     sidecars: []
-    nodeSelector: {}
+    nodeSelector: {
+      "kubernetes.io/arch": "amd64"
+    }
     tolerations: []
     affinity: {}
     volumes: []
