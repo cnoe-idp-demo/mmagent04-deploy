@@ -17,9 +17,9 @@ studio:
 
 postgres:
   external:
-    enabled: false
+    enabled: true
     secretManager:
-      enabled: false
+      enabled: true
       secretName: postgres-secret
       secretKey: connectionUrl
 
