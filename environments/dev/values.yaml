@@ -51,9 +51,9 @@ config:
 ingress:
   enabled1: false
   enabled: true
-  hostname: ""  #  Set this to the hostname you want to use for the ingress.
+  hostname: "mmaroth.people.aws.dev"  #  Set this to the hostname you want to use for the ingress.
   studioHostname: ""  # Set this to the hostname you want to use for the studio ingress
-  ingressClassName: ""
+  ingressClassName: "nginx"
   annotations: {}
   labels: {}
   tls:
