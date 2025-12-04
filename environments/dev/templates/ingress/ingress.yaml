@@ -1,0 +1,81 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: ingress-tls
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
+spec:
+  data:
+  - remoteRef:
+      conversionStrategy: Default
+      decodingStrategy: None
+      key: default-tls-prod
+      metadataPolicy: None
+      property: tls.key
+    secretKey: tls.key
+  - remoteRef:
+      conversionStrategy: Default
+      decodingStrategy: None
+      key: default-tls-prod
+      metadataPolicy: None
+      property: tls.crt
+    secretKey: tls.crt
+  refreshInterval: '0'
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: default-cert
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    name: argo-events-tls
+    template:
+      engineVersion: v2
+      mergePolicy: Replace
+      type: kubernetes.io/tls
+---
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "langGraphCloud.fullname" . }}-ingress
+  namespace: {{ .Values.namespace | default .Release.Namespace | quote }}
+  annotations:
+    {{- include "langGraphCloud.annotations" . | nindent 4 }}
+    {{- with .Values.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.hostname }}
+  labels:
+    {{- include "langGraphCloud.labels" . | nindent 4 }}
+    {{- with .Values.ingress.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - path: /{{ .Values.envName }}/{{ .Values.agentName }}(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "langGraphCloud.fullname" . }}-{{ .Values.apiServer.name }}
+            port:
+              number: {{ .Values.apiServer.service.httpPort }}
+  {{- if .Values.studio.enabled }}
+  - host: {{ .Values.ingress.studioHostname }}
+    http:
+      paths:
+        - path: /{{ .Values.envName }}/{{ .Values.agentName }}/studio(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ include "langGraphCloud.fullname" . }}-{{ .Values.studio.name }}
+              port:
+                number: {{ .Values.studio.service.httpPort }}
+  {{- end }}
+{{- end }}
