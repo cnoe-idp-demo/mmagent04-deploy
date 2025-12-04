@@ -49,13 +49,17 @@ config:
     langSmithTenantId: ""
 
 ingress:
-  enabled: false
+  enabled1: false
+  enabled: true
   hostname: ""  #  Set this to the hostname you want to use for the ingress.
   studioHostname: ""  # Set this to the hostname you want to use for the studio ingress
   ingressClassName: ""
   annotations: {}
   labels: {}
-  tls: []
+  tls:
+    - hosts:
+        - mmaroth.people.aws.dev
+      secretName: ingress-tls
 
 apiServer:
   name: "api-server"
