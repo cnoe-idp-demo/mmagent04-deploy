@@ -26,7 +26,7 @@ spec:
   target:
     creationPolicy: Owner
     deletionPolicy: Retain
-    name: argo-events-tls
+    name: ingress-tls
     template:
       engineVersion: v2
       mergePolicy: Replace
