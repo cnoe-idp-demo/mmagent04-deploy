@@ -57,7 +57,7 @@ spec:
   {{- end }}
   rules:
   {{- if .Values.studio.enabled }}
-  - host: {{ .Values.ingress.studioHostname }}
+  - host: {{ .Values.ingress.hostname }}
     http:
       paths:
         - path: /{{ .Values.envName }}/{{ .Values.agentName }}/studio(/|$)(.*)
