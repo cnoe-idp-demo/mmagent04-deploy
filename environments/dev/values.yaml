@@ -150,7 +150,7 @@ apiServer:
     minAvailable: 1
 
 queue:
-  enabled: false
+  enabled: true
   name: "queue"
   containerPort: 8000
   deployment:
