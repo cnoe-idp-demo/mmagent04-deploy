@@ -56,16 +56,6 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   rules:
-  - host: {{ .Values.ingress.hostname }}
-    http:
-      paths:
-      - path: /{{ .Values.envName }}/{{ .Values.agentName }}(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ include "langGraphCloud.fullname" . }}-{{ .Values.apiServer.name }}
-            port:
-              number: {{ .Values.apiServer.service.httpPort }}
   {{- if .Values.studio.enabled }}
   - host: {{ .Values.ingress.studioHostname }}
     http:
@@ -78,4 +68,14 @@ spec:
               port:
                 number: {{ .Values.studio.service.httpPort }}
   {{- end }}
+  - host: {{ .Values.ingress.hostname }}
+    http:
+      paths:
+      - path: /{{ .Values.envName }}/{{ .Values.agentName }}(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "langGraphCloud.fullname" . }}-{{ .Values.apiServer.name }}
+            port:
+              number: {{ .Values.apiServer.service.httpPort }}
 {{- end }}
